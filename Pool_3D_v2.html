@@ -43,9 +43,20 @@ table{width:100%;border-collapse:collapse;font-size:12px}td{padding:3px 4px;bord
 #cv{width:100%;height:auto;border-radius:8px;cursor:crosshair}
 @media(max-width:800px){body{flex-direction:column-reverse}#side{width:100%;height:48%}#view{height:52%;flex:none}}
 #joy,#joy2{position:absolute;bottom:26px;width:112px;height:112px;border-radius:50%;background:#ffffff14;border:1px solid #ffffff2a;display:none;touch-action:none;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}#joy{left:18px}#joy2{right:18px}
-#wkbar{display:none;position:absolute;top:12px;left:12px;gap:6px;flex-wrap:wrap;background:#10203299;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px;border-radius:14px;border:1px solid #ffffff16}body.walk #wkbar{display:flex}body.walk #tb{display:none}
+#wkbar{display:none;position:absolute;top:12px;left:12px;gap:6px;flex-wrap:wrap;background:#10203299;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px;border-radius:14px;border:1px solid #ffffff16}body.walk #wkbar{display:none}body.walk.ctl #wkbar{display:flex}body.walk #tb{display:none}body.walk #side{display:none}body.walk #view{position:fixed;inset:0;z-index:30;width:100vw;height:100vh;height:100dvh;flex:none}
 #joy i,#joy2 i{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px;border-radius:50%;background:#e8b86acc;box-shadow:0 4px 14px #0006;pointer-events:none}
 body.walk #joy,body.walk #joy2{display:block}body.walk #lg{display:none}
+#xh{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#ffffffb0;box-shadow:0 0 0 2px #0005;display:none;pointer-events:none}
+#hud{position:absolute;top:14px;right:14px;display:none;gap:8px;align-items:center;background:#10203299;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px 12px;border-radius:14px;border:1px solid #ffffff16;font-variant-numeric:tabular-nums}
+#hud i{font-style:normal;color:var(--tl);font-size:11px}
+body.walk.ctl #xh{display:block}body.walk.ctl #hud{display:flex}
+#joy,#joy2{opacity:.25;transition:opacity .35s}#joy.act,#joy2.act{opacity:.8}
+#wkh{display:none;position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:50%;border:1px solid #ffffff22;background:#00000022;color:#fff;opacity:.28;font-size:18px;line-height:1;cursor:pointer;transition:opacity .2s;padding:0}
+body.walk #wkh{display:block}#wkh:active,body.ctl #wkh{opacity:.85}body.walk.ctl #wkh{display:none}
+#gyq,#gyc{display:none;position:absolute;top:10px;width:34px;height:34px;border-radius:50%;border:1px solid #ffffff22;background:#00000022;color:#fff;opacity:.28;font-size:16px;line-height:1;cursor:pointer;transition:opacity .2s,background .2s,border-color .2s;padding:0}
+#gyq{right:10px}#gyc{right:52px}
+body.walk #gyq{display:block}body.walk.gyon:not(.ctl) #gyc{display:block}body.walk.ctl #gyq,body.walk.ctl #gyc{display:none}
+#gyq.on{opacity:.85;border-color:var(--tl);background:#6cc4c033}#gyq:active,#gyc:active{opacity:.95}
 </style></head><body>
 <div id="side">
 <div class="hd"><h1>CES Pool Plant 3D</h1><small>Eng. Hesham Mohamed — CES</small></div>
@@ -65,7 +76,7 @@ body.walk #joy,body.walk #joy2{display:block}body.walk #lg{display:none}
 <details><summary>🖥️ View</summary><div class="in"><label>Ground transparency<input id="go" type="range" min="0" max="100" value="55"></label></div></details>
 <details><summary>📋 BOM</summary><div class="in"><div id="bom"></div><button class="b" id="cp" style="margin-top:8px;width:100%">Copy CSV</button></div></details>
 </div>
-<div id="view"><div id="tb"><button class="b" id="ud" title="Ctrl+Z">↩︎ Undo</button><button class="b on" id="mv" title="Drag only moves the selected item">✋ Move</button><button class="b" id="lnk">🔗 Link</button><button class="b on" id="lb">🏷️ Labels</button><button class="b on" id="fl">💧 Flow</button><button class="b" id="tp">⬇️ Top</button><button class="b" id="rc">🎯 Reset</button><button class="b" id="pr">🏭 Pump room</button><button class="b" id="wk">🚶 Walk</button></div><div id="hint"></div><div id="joy"><i></i></div><div id="joy2"><i></i></div><div id="wkbar"><button class="b" id="tl">⟲ 45°</button><button class="b" id="tr">⟳ 45°</button><button class="b" id="gy">🧭 Gyro</button><button class="b" id="gc">⊙ Center</button><button class="b" id="sx">✖ Exit</button></div><div id="lg"><i style="background:#5b9bd5"></i>Suction<br><i style="background:#e27d7d"></i>Discharge<br><i style="background:#6cc59a"></i>Filtered water / Return<br><i style="background:#e8b86a"></i>Dosing</div></div>
+<div id="view"><div id="tb"><button class="b" id="ud" title="Ctrl+Z">↩︎ Undo</button><button class="b on" id="mv" title="Drag only moves the selected item">✋ Move</button><button class="b" id="lnk">🔗 Link</button><button class="b on" id="lb">🏷️ Labels</button><button class="b on" id="fl">💧 Flow</button><button class="b" id="tp">⬇️ Top</button><button class="b" id="rc">🎯 Reset</button><button class="b" id="pr">🏭 Pump room</button><button class="b" id="wk">🚶 Walk</button></div><div id="hint"></div><button id="wkh" title="Controls">⋯</button><button id="gyq" title="Gyro">🧭</button><button id="gyc" title="Center view">⊙</button><div id="xh"></div><div id="hud"><b id="hdg">N 000°</b><i id="hgy"></i></div><div id="joy"><i></i></div><div id="joy2"><i></i></div><div id="wkbar"><button class="b" id="tl">⟲ 45°</button><button class="b" id="tr">⟳ 45°</button><button class="b" id="gy">🧭 Gyro</button><button class="b" id="gc">⊙ Center</button><button class="b" id="gs">⚙ 1×</button><button class="b" id="sx">✖ Exit</button></div><div id="lg"><i style="background:#5b9bd5"></i>Suction<br><i style="background:#e27d7d"></i>Discharge<br><i style="background:#6cc59a"></i>Filtered water / Return<br><i style="background:#e8b86a"></i>Dosing</div></div>
 <div id="md"><div><canvas id="cv" width="640" height="420"></canvas><div class="g"><button class="b" id="un">Undo</button><button class="b" id="cl">Clear</button><button class="b a" id="ap">Apply</button><button class="b" id="cx">Close</button></div><small>Click to add points (0.5 m grid) — at least 3 points</small></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -462,7 +473,7 @@ function clickAt(e){ray(e);
 R.domElement.addEventListener('pointerdown',e=>{camA=null;if(walkOn){lookId=e.pointerId;lastLook={x:e.clientX,y:e.clientY};dn={x:e.clientX,y:e.clientY,on:null};return}if(e.pointerType==='mouse'&&e.button!==0){dn=null;return}ray(e);dn={x:e.clientX,y:e.clientY,on:null};
  if(!linkMode&&!mode&&moveOn){const p=pick();if(p&&p===sel){dn.on=p;O.enabled=false}}});
 R.domElement.addEventListener('pointermove',e=>{
- if(walkOn){if(e.pointerId===lookId&&lastLook){wk.tyaw-=(e.clientX-lastLook.x)*.005;wk.tpit=Math.max(-1.2,Math.min(1.2,wk.tpit-(e.clientY-lastLook.y)*.005));lastLook={x:e.clientX,y:e.clientY}}return}
+ if(walkOn){if(e.pointerId===lookId&&lastLook){{const dx=(e.clientX-lastLook.x)*.005,dy=(e.clientY-lastLook.y)*.005;if(gyOn&&gy0){gy0.t-=dx;wk.po=Math.max(-.7,Math.min(.7,wk.po-dy))}else{wk.tyaw-=dx;wk.tpit=Math.max(-1.2,Math.min(1.2,wk.tpit-dy))}}lastLook={x:e.clientX,y:e.clientY}}return}
  if(dn&&dn.on&&!drag&&Math.hypot(e.clientX-dn.x,e.clientY-dn.y)>10){ray(e);const v=gnd();if(v){H();drag=dn.on;off={x:drag.x-v.x,z:drag.z-v.z};tgt={x:drag.x,z:drag.z};dmx=drag.t==='tank'?items.filter(o=>o.t==='mixer'&&o.oy>0&&Math.hypot(o.x-drag.x,o.z-drag.z)<.01):[];R.domElement.style.cursor='grabbing';HB.visible=false}}
  if(drag){ray(e);const v=gnd();if(v)tgt={x:Math.round((v.x+off.x)*20)/20,z:Math.round((v.z+off.z)*20)/20};return}
  if(!dn&&!linkMode&&!mode){ray(e);const p=pick();if(p!==hv){hv=p;R.domElement.style.cursor=p?(p===sel&&moveOn?'grab':'pointer'):'default';if(p&&p!==sel){HB.setFromObject(p.g);HB.visible=true}else HB.visible=false}}});
@@ -475,7 +486,7 @@ addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)
  else if(sel&&(e.key==='Delete'||e.key==='Backspace'))delSel();
  else if(sel&&e.key.startsWith('Arrow')){e.preventDefault();H();const st=e.shiftKey?.5:.05;let x=sel.x,z=sel.z;if(e.key==='ArrowLeft')x-=st;if(e.key==='ArrowRight')x+=st;if(e.key==='ArrowUp')z-=st;if(e.key==='ArrowDown')z+=st;moveTo(sel,+x.toFixed(2),+z.toFixed(2));showSel()}});
 $('lks').onclick=e=>{const i=e.target.dataset.i;if(i!=null){H();links.splice(+i,1);buildPipes()}};
-let walkOn=false,lookId=null,lastLook=null,sv=null,gyOn=false,gy0=null;const wk={yaw:-HP,pit:0,tyaw:-HP,tpit:0,vx:0,vz:0,jx:0,jz:0,lx:0,ly:0,keys:{},ph:0,t:0,go:null};
+let walkOn=false,lookId=null,lastLook=null,sv=null,gyOn=false,gy0=null;const wk={yaw:-HP,pit:0,tyaw:-HP,tpit:0,vx:0,vz:0,jx:0,jz:0,lx:0,ly:0,keys:{},ph:0,t:0,go:null,po:0,hc:0};
 const GT=new THREE.Mesh(new THREE.RingGeometry(.14,.2,28).rotateX(-HP),new THREE.MeshBasicMaterial({color:0xe8b86a,transparent:true,opacity:.85,depthTest:false}));GT.visible=false;GT.renderOrder=7;S.add(GT);
 addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;wk.keys[e.code]=true;if(walkOn&&e.code.startsWith('Arrow'))e.preventDefault()});
 addEventListener('keyup',e=>{wk.keys[e.code]=false});
@@ -483,41 +494,53 @@ function walkStart(){if(!items.length||!RMC.b){hint('Build the pump room first (
  resetModes();sel=null;showSel();sv={p:C.position.clone(),t:O.target.clone(),fov:C.fov};camA=null;walkOn=true;O.enabled=false;document.body.classList.add('walk');$('wk').classList.add('on');GR.visible=false;GM.opacity=.12;
  const b=RMC.b;C.rotation.order='YXZ';let sx=b.x0+1.0,sz=(b.z0+b.z1)/2;const fr=(x,z)=>!OB.some(o=>x>o.x0-.6&&x<o.x1+.6&&z>o.z0-.6&&z<o.z1+.6);out:for(const dx of [1,2,3,4])for(let k=0;k<=12;k++){for(const sg of [1,-1]){const z=(b.z0+b.z1)/2+sg*k*.4,x=b.x0+dx;if(z>b.z0+.5&&z<b.z1-.5&&fr(x,z)){sx=x;sz=z;break out}}}
  C.position.set(sx,PRY+1.65,sz);wk.yaw=wk.tyaw=-HP;wk.pit=wk.tpit=-.1;wk.vx=wk.vz=0;wk.go=null;C.fov=70;C.updateProjectionMatrix();
- hint('Joysticks: left = move, right = look · tap the floor to walk there · 🧭 Gyro to look by turning your phone');clearTimeout(ht);ht=setTimeout(()=>hint(''),5000)}
-function walkStop(){if(!walkOn)return;walkOn=false;gyroOff();GT.visible=false;document.body.classList.remove('walk');$('wk').classList.remove('on');GR.visible=true;GM.opacity=$('go').value/100;C.fov=sv.fov;C.updateProjectionMatrix();C.rotation.order='XYZ';C.position.copy(sv.p);O.target.copy(sv.t);O.enabled=true;C.lookAt(O.target);O.update();hint('')}
-$('wk').onclick=()=>walkOn?walkStop():walkStart();$('sx').onclick=walkStop;
+ HB.visible=false;BH.visible=false;fsEnter()}
+function walkStop(){if(!walkOn)return;walkOn=false;gyroOff();GT.visible=false;document.body.classList.remove('walk','ctl');fsExit();$('wk').classList.remove('on');GR.visible=true;GM.opacity=$('go').value/100;C.fov=sv.fov;C.updateProjectionMatrix();C.rotation.order='XYZ';C.position.copy(sv.p);O.target.copy(sv.t);O.enabled=true;C.lookAt(O.target);O.update();hint('')}
+let fsOn=false;
+function fsEnter(){try{const el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){fsOn=true;const r=f.call(el);if(r&&r.catch)r.catch(()=>{fsOn=false})}}catch(x){fsOn=false}}
+function fsExit(){const f=fsOn;fsOn=false;try{if(f&&(document.fullscreenElement||document.webkitFullscreenElement))(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(x){}}
+document.addEventListener('fullscreenchange',()=>{if(fsOn&&!document.fullscreenElement&&walkOn)walkStop()});
+$('wk').onclick=()=>walkOn?walkStop():walkStart();$('wkh').onclick=toggleCtl;$('sx').onclick=walkStop;
 $('tl').onclick=()=>{wk.tyaw+=Math.PI/4};$('tr').onclick=()=>{wk.tyaw-=Math.PI/4};
 let gyGot=false,gyTm=[],gySn=null;const zee=new V3(0,0,1),eul=new THREE.Euler(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion(-Math.SQRT1_2,0,0,Math.SQRT1_2),qc=new THREE.Quaternion();
-function gyApply(f){const yaw=Math.atan2(-f.x,-f.z),pit=Math.asin(Math.max(-1,Math.min(1,f.y)));if(!gy0)gy0={y:yaw,t:wk.tyaw};let d=yaw-gy0.y;d=((d+Math.PI*3)%(Math.PI*2))-Math.PI;wk.tyaw=gy0.t+d;wk.tpit=Math.max(-1.2,Math.min(1.2,pit));gyGot=true}
+let gyGain=1;const gf={y:null,p:0,t:0};
+function gyApply(f){const now=performance.now(),yaw=Math.atan2(-f.x,-f.z),pit=Math.asin(Math.max(-1,Math.min(1,f.y)));if(!gy0){gy0={y:yaw,t:wk.tyaw};gf.y=null;wk.po=0}
+ let d=yaw-gy0.y;d=((d+Math.PI*3)%(Math.PI*2))-Math.PI;d*=gyGain;const pp=pit*gyGain;
+ if(gf.y===null){gf.y=d;gf.p=pp}else{const dt=Math.max(.004,(now-gf.t)/1000),sy=Math.abs(d-gf.y)/dt,sq=Math.abs(pp-gf.p)/dt,ay=1/(1+1/(2*Math.PI*Math.min(30,1.4+sy*1.1)*dt)),ap=1/(1+1/(2*Math.PI*Math.min(30,1.4+sq*1.1)*dt));
+  if(Math.abs(d-gf.y)>.0012||sy>.08)gf.y+=ay*(d-gf.y);if(Math.abs(pp-gf.p)>.0012||sq>.08)gf.p+=ap*(pp-gf.p)}
+ gf.t=now;wk.tyaw=gy0.t+gf.y;wk.tpit=Math.max(-1.2,Math.min(1.2,gf.p+wk.po));gyGot=true}
 function onDO(e){if(!gyOn||!walkOn||e.alpha==null||e.beta==null)return;const o=((screen.orientation&&screen.orientation.angle)||window.orientation||0)*Math.PI/180;
  eul.set(e.beta*Math.PI/180,e.alpha*Math.PI/180,-(e.gamma||0)*Math.PI/180,'YXZ');qa.setFromEuler(eul);qa.multiply(qb);qa.multiply(qc.setFromAxisAngle(zee,-o));gyApply(new V3(0,0,-1).applyQuaternion(qa))}
 function onDOA(e){if(!gyGot||gyAbs)onDO(e)}
 let gyAbs=false;
 function trySensor(){try{if(!window.RelativeOrientationSensor)return;gySn=new RelativeOrientationSensor({frequency:60,referenceFrame:'screen'});gySn.addEventListener('reading',()=>{if(!gyOn||!walkOn||!gySn.quaternion)return;const q=gySn.quaternion,v=new V3(0,0,-1).applyQuaternion(new THREE.Quaternion(q[0],q[1],q[2],q[3]));gyApply(new V3(v.x,v.z,-v.y))});gySn.addEventListener('error',()=>{});gySn.start()}catch(x){}}
-function gyroOff(){gyOn=false;gy0=null;gyGot=false;gyAbs=false;gyTm.forEach(clearTimeout);gyTm=[];removeEventListener('deviceorientation',onDO);removeEventListener('deviceorientationabsolute',onDOA);try{if(gySn)gySn.stop()}catch(x){}gySn=null;$('gy').classList.remove('on')}
-function gyroOn(){const go=()=>{gyOn=true;gy0=null;gyGot=false;gyAbs=false;$('gy').classList.add('on');addEventListener('deviceorientation',onDO);
+function gyroOff(){gyOn=false;gy0=null;gf.y=null;wk.po=0;gyGot=false;gyAbs=false;gyTm.forEach(clearTimeout);gyTm=[];removeEventListener('deviceorientation',onDO);removeEventListener('deviceorientationabsolute',onDOA);try{if(gySn)gySn.stop()}catch(x){}gySn=null;$('gy').classList.remove('on');$('gyq').classList.remove('on');document.body.classList.remove('gyon')}
+function gyroOn(){const go=()=>{gyOn=true;gy0=null;gyGot=false;gyAbs=false;$('gy').classList.add('on');$('gyq').classList.add('on');document.body.classList.add('gyon');hint('Gyro ON');clearTimeout(ht);ht=setTimeout(()=>hint(''),1200);addEventListener('deviceorientation',onDO);
   gyTm.push(setTimeout(()=>{if(gyOn&&!gyGot){gyAbs=true;addEventListener('deviceorientationabsolute',onDOA)}},800));
   gyTm.push(setTimeout(()=>{if(gyOn&&!gyGot)trySensor()},1600));
   gyTm.push(setTimeout(()=>{if(gyOn&&!gyGot){const why=!window.isSecureContext?'this page is not served over HTTPS':(window.top!==window?'this embedded viewer blocks the motion sensors':'motion sensors are unavailable or blocked');gyroOff();hint('Gyro unavailable: '+why+'. Use the look joystick, or open the file from an HTTPS site (e.g. GitHub Pages) in Chrome.');clearTimeout(ht);ht=setTimeout(()=>hint(''),7000)}},3200))};
  const D=window.DeviceOrientationEvent;if(D&&typeof D.requestPermission==='function')D.requestPermission().then(r=>{if(r==='granted')go()}).catch(()=>{});else go()}
-$('gy').onclick=()=>gyOn?gyroOff():gyroOn();$('gc').onclick=()=>{gy0=null};
-function walkTap(e){ray(e);const p=pick();if(p){select(p);return}const v=gnd();if(v){const b=RMC.b,c=walkClamp(Math.max(b.x0+.4,Math.min(b.x1-.4,v.x)),Math.max(b.z0+.4,Math.min(b.z1-.4,v.z)));wk.go={x:c[0],z:c[1]};GT.position.set(c[0],PRY+.03,c[1]);GT.visible=true}}
+$('gy').onclick=()=>gyOn?gyroOff():gyroOn();
+$('gyq').onclick=()=>{if(gyOn){gyroOff();hint('Gyro OFF');clearTimeout(ht);ht=setTimeout(()=>hint(''),1100)}else gyroOn()};$('gyc').onclick=()=>{gy0=null;hint('View centered');clearTimeout(ht);ht=setTimeout(()=>hint(''),1000)};$('gc').onclick=()=>{gy0=null};$('gs').onclick=()=>{gyGain=gyGain===1?1.5:gyGain===1.5?2:1;$('gs').textContent='⚙ '+gyGain+'×';gy0=null};
+let wkLt=0;function toggleCtl(){document.body.classList.toggle('ctl')}
+function walkTap(e){const tn=performance.now();if(tn-wkLt<350){wkLt=0;wk.go=null;toggleCtl();return}wkLt=tn;ray(e);const p=pick();if(p){select(p);return}const v=gnd();if(v){const b=RMC.b,c=walkClamp(Math.max(b.x0+.4,Math.min(b.x1-.4,v.x)),Math.max(b.z0+.4,Math.min(b.z1-.4,v.z)));wk.go={x:c[0],z:c[1]};}}
 function walkClamp(x,z){const b=RMC.b;x=Math.max(b.x0+.4,Math.min(b.x1-.4,x));z=Math.max(b.z0+.4,Math.min(b.z1-.4,z));const m=.35;
  for(let k=0;k<2;k++)OB.forEach(o=>{if(x>o.x0-m&&x<o.x1+m&&z>o.z0-m&&z<o.z1+m){const a=[x-(o.x0-m),(o.x1+m)-x,z-(o.z0-m),(o.z1+m)-z],i=a.indexOf(Math.min(...a));if(i===0)x=o.x0-m;else if(i===1)x=o.x1+m;else if(i===2)z=o.z0-m;else z=o.z1+m}});return[x,z]}
 function mkJoy(el,cb){const kn=el.firstElementChild;let id=null;const mv=e=>{const r=el.getBoundingClientRect(),m=r.width/2;let dx=e.clientX-(r.left+m),dy=e.clientY-(r.top+r.height/2);const l=Math.hypot(dx,dy);if(l>m){dx*=m/l;dy*=m/l}cb(dx/m,-dy/m);kn.style.transform=`translate(${dx}px,${dy}px)`};
- el.onpointerdown=e=>{id=e.pointerId;try{el.setPointerCapture(id)}catch(x){}mv(e)};el.onpointermove=e=>{if(e.pointerId===id)mv(e)};el.onpointerup=el.onpointercancel=()=>{id=null;cb(0,0);kn.style.transform='translate(0,0)'}}
+ el.onpointerdown=e=>{id=e.pointerId;el.classList.add('act');try{el.setPointerCapture(id)}catch(x){}mv(e)};el.onpointermove=e=>{if(e.pointerId===id)mv(e)};el.onpointerup=el.onpointercancel=()=>{id=null;el.classList.remove('act');cb(0,0);kn.style.transform='translate(0,0)'}}
 mkJoy($('joy'),(x,y)=>{wk.jx=x;wk.jz=y});mkJoy($('joy2'),(x,y)=>{wk.lx=x;wk.ly=y});
 function walkStep(dt){const K=wk.keys,sp=K.ShiftLeft||K.ShiftRight?3.4:1.7;wk.t+=dt;
  const fx=-Math.sin(wk.yaw),fz=-Math.cos(wk.yaw),rx=Math.cos(wk.yaw),rz=-Math.sin(wk.yaw);
  let ix=(K.KeyD||K.ArrowRight?1:0)-(K.KeyA||K.ArrowLeft?1:0)+wk.jx,iz=(K.KeyW||K.ArrowUp?1:0)-(K.KeyS||K.ArrowDown?1:0)+wk.jz;
  if(Math.hypot(ix,iz)>.05){wk.go=null;GT.visible=false}
  else if(wk.go){const dx=wk.go.x-C.position.x,dz=wk.go.z-C.position.z,d=Math.hypot(dx,dz);if(d<.2){wk.go=null;GT.visible=false}else{iz=(dx*fx+dz*fz)/d;ix=(dx*rx+dz*rz)/d;if(d>.6&&!gyOn){let da=Math.atan2(-dx,-dz)-wk.tyaw;da=((da+Math.PI*3)%(Math.PI*2))-Math.PI;wk.tyaw+=da*(1-Math.exp(-3*dt))}}}
- if(!gyOn){wk.tyaw-=wk.lx*1.9*dt;wk.tpit=Math.max(-1.2,Math.min(1.2,wk.tpit+wk.ly*1.2*dt))}
- const kl=1-Math.exp(-12*dt);wk.yaw+=(wk.tyaw-wk.yaw)*kl;wk.pit+=(wk.tpit-wk.pit)*kl;
+ if(gyOn&&gy0){gy0.t-=wk.lx*1.9*dt;wk.po=Math.max(-.7,Math.min(.7,wk.po+wk.ly*1.2*dt))}else if(!gyOn){wk.tyaw-=wk.lx*1.9*dt;wk.tpit=Math.max(-1.2,Math.min(1.2,wk.tpit+wk.ly*1.2*dt))}
+ const kl=1-Math.exp(-(gyOn?22:12)*dt);wk.yaw+=(wk.tyaw-wk.yaw)*kl;wk.pit+=(wk.tpit-wk.pit)*kl;
  const l=Math.hypot(ix,iz),k=Math.min(1,l),tx=l?ix/l*k*sp:0,tz=l?iz/l*k*sp:0,a=1-Math.exp(-9*dt);wk.vx+=(tx-wk.vx)*a;wk.vz+=(tz-wk.vz)*a;
  const p=walkClamp(C.position.x+(fx*wk.vz+rx*wk.vx)*dt,C.position.z+(fz*wk.vz+rz*wk.vx)*dt),v=Math.hypot(wk.vx,wk.vz),mv=Math.min(1,v/1.7);wk.ph+=v*dt*4.6;
  const bob=Math.sin(wk.ph*2)*.028*mv+Math.sin(wk.t*1.2)*.004;
- C.position.set(p[0],PRY+1.65+bob,p[1]);C.rotation.set(wk.pit+bob*.25,wk.yaw,Math.sin(wk.ph)*.006*mv)}
+ C.position.set(p[0],PRY+1.65+bob,p[1]);C.rotation.set(wk.pit+bob*.25,wk.yaw,Math.sin(wk.ph)*.006*mv);if(++wk.hc%6===0)hudUp()}
+function hudUp(){let b=Math.atan2(-Math.sin(wk.yaw),Math.cos(wk.yaw))*180/Math.PI;b=(b+360)%360;const D=['N','NE','E','SE','S','SW','W','NW'];$('hdg').textContent=D[Math.round(b/45)%8]+' '+String(Math.round(b)%360).padStart(3,'0')+'°';$('hgy').textContent=gyOn?(gyGot?'🧭 GYRO':'🧭 …'):''}
 
 const pal=$('pal');Object.keys(CAT).forEach(t=>{const b=document.createElement('button');b.className='b';b.textContent=CAT[t].n;b.onclick=()=>{resetModes();mode=t;b.classList.add('on');hint('Click the floor to place: '+CAT[t].n)};pal.appendChild(b)});
 $('lnk').onclick=e=>{const on=!linkMode;resetModes();if(on){linkMode=true;e.currentTarget.classList.add('on');hint('Click a port (from), then a port (to)');buildPorts()}};
