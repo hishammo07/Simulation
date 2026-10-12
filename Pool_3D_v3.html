@@ -134,6 +134,7 @@ body.th-ces td:last-child{color:#5eead4}
 @media(max-width:800px){body.th-ces #wv{width:100%}}
 @media(prefers-reduced-motion:reduce){#wv i,.hd .lg svg{animation:none}}
 
+.ci b{display:block;font-size:12px;margin:9px 0 3px;cursor:pointer;color:var(--am)}.ci select{width:100%}
 </style></head><body class="th-ces">
 <div id="side">
 <div id="wv" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -160,6 +161,7 @@ body.th-ces td:last-child{color:#5eead4}
 <div class="r2 fo"><label>Filtration pumps<input id="fpu" type="number" min="1" max="2" value="1"></label><label>Turnover (h)<input id="ftn" type="number" step=".5" min="1" value="4"></label></div>
 <div class="g"><button class="b" id="ckb">🔍 Check clashes</button><div id="ckr" style="font-size:12px;align-self:center"></div></div>
 <div class="g"><button class="b a" id="auto">⚡ Auto build + connect</button><button class="b" id="clr">🗑️ Clear equipment</button></div>
+<label>Components — select model</label><div id="cmpl"></div>
 <label>Or pick equipment, then click the floor</label><div class="g" id="pal"></div></div></details>
 <details id="secplan"><summary>📐 Plan &amp; distribution</summary><div class="in">
 <div id="plbox"><canvas id="plc"></canvas><button class="b" id="plx" title="Full screen">⤢</button></div>
@@ -884,6 +886,11 @@ function clashCheck(show){CG.children.slice().forEach(o=>{o.geometry.dispose();o
  return{pp:pp.length,pe:pe.length,ee:ee.length}}
 function ckShow(on){const r=clashCheck(on),t=r.pp+r.pe+r.ee;$('ckr').innerHTML=t?`<span class="bad">pipe–pipe ${r.pp} · pipe–equip ${r.pe} · equip–equip ${r.ee}</span>`:'<span class="ok">No clashes</span>';return r}
 $('ckb').onclick=()=>{ckOn=!ckOn;ckShow(ckOn);$('ckb').classList.toggle('on',ckOn);$('ckb').textContent=ckOn?'🔍 Hide markers':'🔍 Check clashes'};
+let cmpF=0,cmpSig='';
+function cmpList(){const el=$('cmpl');if(!el)return;const T=['filter','pump','uv','chlor','doser','tank','mixer','balance','heater','ctrl','panel'],L=items.filter(i=>T.includes(i.t)&&CAT[i.t].M&&CAT[i.t].M.length>1).sort((a,b)=>T.indexOf(a.t)-T.indexOf(b.t)||a.id-b.id),sg=L.map(i=>i.id+':'+i.m+':'+(i.nm||'')+(i.sb?'s':'')).join(',');if(sg===cmpSig)return;cmpSig=sg;
+ el.innerHTML=L.map(i=>`<div class="ci"><b data-id="${i.id}">${CAT[i.t].n}${i.nm?' · '+i.nm:''}${i.sb?' (standby)':''}</b><select data-id="${i.id}">${CAT[i.t].M.map((m,k)=>`<option value="${k}" ${k==i.m?'selected':''}>${m.l}</option>`).join('')}</select></div>`).join('')||'<small>No equipment yet.</small>';
+ el.querySelectorAll('select').forEach(x=>x.onchange=()=>{const it=items.find(o=>o.id==x.dataset.id);if(!it)return;H();it.m=+x.value;it.sp={};upd(it);cmpSig='';if(sel===it)showSel();cmpList()});
+ el.querySelectorAll('b').forEach(b=>b.onclick=()=>{const it=items.find(o=>o.id==b.dataset.id);if(it)select(it)})}
 function refresh(){if(MODE==='fountain')refreshF();else refreshPool();planDraw()}
 function refreshPool(){
  const ar=Math.abs(area(pts)),vol=ar*depth,pf=items.filter(i=>i.t==='pump'&&!i.sb).reduce((s,i)=>s+spec(i).q,0),ff=items.filter(i=>i.t==='filter').reduce((s,i)=>s+spec(i).q,0),rq=vol/6;
@@ -1061,7 +1068,7 @@ syncUI();planFill();
 ['fsk','frt','qin','pty','gw','rm','vt','npu','nsb','nfl','rdx','fpu'].forEach(id=>$(id).onchange=()=>{FM={sk:+$('fsk').value,rt:+$('frt').value,qin:+$('qin').value||8,ty:$('pty').value,gw:+$('gw').value||.3,rm:+$('rm').value||3.5,vt:$('vt').value,np:+$('npu').value||2,sb:+$('nsb').value||0,nf:+$('nfl').value||0,rd:+$('rdx').value||9,fp:+$('fpu').value||1};rebuild()});
 showSel();buildPool();fitCam(false);rs();
 const clk=new THREE.Clock();
-(function loop(){requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),.1);
+(function loop(){requestAnimationFrame(loop);if(++cmpF%15===0)cmpList();const dt=Math.min(clk.getDelta(),.1);
  if(flowOn)for(const f of flows){f.t=(f.t+dt*1.2/f.L)%1;let d=f.t*f.L,i=0;while(i<f.ls.length-1&&d>f.ls[i]){d-=f.ls[i];i++}f.o.position.lerpVectors(f.P[i],f.P[i+1],f.ls[i]?Math.min(1,d/f.ls[i]):0)}
  WTX.offset.x+=dt*.015;WTX.offset.y+=dt*.01;WFX.offset.y-=dt*.9;WFU.offset.y+=dt*1.3;if(MODE==='fountain')jetsStep(clk.elapsedTime);
  if(camA){const k=Math.min(1,(performance.now()-camA.s)/camA.d),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;C.position.lerpVectors(camA.p0,camA.p1,e);O.target.lerpVectors(camA.t0,camA.t1,e);if(k>=1)camA=null}
